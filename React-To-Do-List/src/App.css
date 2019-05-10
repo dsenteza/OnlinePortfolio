@@ -1,0 +1,101 @@
+html, body {
+	height: 100%;
+	/*min-width: 60px;*/
+	margin-right: 50px;
+	margin-left: 50px;
+	margin-top: 100px;
+	margin-bottom: 100px;
+}
+
+#toDoForm {
+	font-family: 'Raleway', sans-serif;
+}
+
+
+h1 {
+	margin-right: auto;
+	margin-left: auto;
+}
+
+#newTitle {
+	font-family: 'Raleway', sans-serif;
+	height: 50px;	
+	resize: none; 
+	overflow: auto;
+	margin-right: 15px;
+	outline: none;
+	border: none;
+	border-radius: 30px;
+	border: solid 2px #9D9FA7;	
+}
+
+#newTitle:hover {
+	box-shadow: 5px 5px 5px #9D9FA7;
+}
+
+#newTitle:focus {
+	border: solid 2px #003087;	
+}
+
+button {
+	outline: none;
+	border: none;
+	border-radius: 10px;
+}
+
+#submit {
+	color: ;
+	background-color: #00AB84;
+	height: 50px;
+	width: 50px;
+	resize: none;
+	font-family: 'Raleway', sans-serif;
+	font-size: 2em;
+}
+
+#submit:hover {
+	border-bottom: solid 2px #2C5234;
+	border-right: solid 2px #2C5234;
+}
+
+.delete {
+	background-color: #F65058;
+	height: 50px;
+	width: 100px;
+	resize: none;
+	font-family: 'Raleway', sans-serif;
+	font-weight: bold;
+}
+
+.delete:hover {
+	border-bottom: solid 2px #76232F;
+	border-right: solid 2px #76232F;
+}
+
+.check {
+	height: 25px;
+  	width: 25px;
+  	background-color: #eeeeee;
+}
+
+.check:hover {
+	background-color: #bbbbbb;
+}
+
+.check:checked {
+	background-color: #2196F3;
+}
+
+.taskName {
+	font-family: 'Raleway', sans-serif;
+	font-size: 1em;
+}
+
+.completed p {
+	color: #d3d3d3;
+	text-decoration: line-through;
+}
+
+.completed input {
+	background-color: black;
+}

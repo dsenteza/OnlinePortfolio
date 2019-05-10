@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Instagram Clone</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<!--bootstrap link-->
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!--Google Font Roboto-->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+	<!--Google Font Cookie-->
+	<link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet">
+</head>
+<body>
+	<!--Boostrap glyphicons from https://getbootstrap.com/docs/3.3/components/-->
+	<!--navigation bar-->
+	<div class="navigation">
+		<div class="row">
+			<div class="col-md-4">
+				<span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+				<span id="insta">Instagram</span>
+			</div>
+			<div class="col-md-4">
+				<form>
+					<input type="text" name="search" placeholder="Search">
+				</form>
+			</div>
+			<div class="col-md-4">
+				<span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+			</div>
+		</div>
+	</div>
+
+	<!--post div-->
+	<div id="posts">
+		<!--post one-->
+		<div class="upload">
+			<p class="handle"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  someperson</p>
+			<img src="img/wics.jpg">
+			<div class="imgFooter">
+				<p class="imgIcons">
+					<span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+				</p>
+				<p class="bookmark">
+					<span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+				</p>
+				<br><br>
+				<p class="caption"><span class="handle">someperson</span>WashU Women in Computer Science group at GHC 2018 in Houston, Texas.</p>
+			</div>
+		</div>
+		<!--post two-->
+		<div class="upload">
+			<p class="handle"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  someperson</p>
+			<img src="img/buzzfeed.jpg">
+			<div class="imgFooter">
+				<p class="imgIcons">
+					<span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+				</p>
+				<p class="bookmark">
+					<span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+				</p>
+				<br><br>
+				<p class="caption"><span class="handle">someperson</span>Meeting BuzzFeed online personality Ashlee Perez.</p>
+			</div>
+		</div>
+		<div id="suggestions">
+			<h2>Suggestions for You:</h2>
+			<div id="suggs">
+				<div class="user">
+					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>  
+					<p>St. Louis Blues  <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span></p>
+					<p>Popular</p>
+					<button>Follow</button>
+				</div>
+				<div class="user">
+					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>  
+					<p>CONAN  <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span></p>
+					<p>Followed by someperson</p>
+					<button>Follow</button>
+				</div>
+				<div class="user">
+					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>  
+					<p>Alt-J  <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span></p>
+					<p>Followed By Foobar1</p>
+					<button>Follow</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--sidebar div-->
+	<div id="sidebar">
+		<p><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  someperson</p>
+		<p id="p2">Some Person</p>
+		<hr>
+		<h1>Stories</h1>
+		<table>
+			<tr>
+				<td class="co1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  foobar1</td>
+				<td class="col2">Foo User 1</td>
+			</tr>
+			<tr>
+				<td class="co1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  foobar2</td>
+				<td class="col2">Foo User 2</td>
+			</tr>
+			<tr>
+				<td class="co1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  foobar3</td>
+				<td class="col2">Foo User 3</td>
+			</tr>
+			<tr>
+				<td class="co1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  smarteveryday</td>
+				<td class="col2">Smart Every Day</td>
+			</tr>
+			<tr>
+				<td class="co1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  foobar4</td>
+				<td class="col2">Foo User 4</td>
+			</tr>
+			<tr>
+				<td class="co1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  some.username</td>
+				<td class="col2">Some.Username</td>
+			</tr>
+			<tr>
+				<td class="co1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  foobar5</td>
+				<td class="col2">Foo User 5</td>
+			</tr>
+			<tr>
+				<td class="co1"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  foobar6</td>
+				<td class="col2">Foo User 6</td>
+			</tr>			
+		</table>
+	</div>
+</body>
+</html>
