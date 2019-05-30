@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Javascript Calculator</title>
+	</head>
+
+	<body>
+		<h1>Welcome to Your JavaScript Calculator!</h1>
+		<h2>CHOOSE TWO NUMBERS:</h2>
+		<form>
+			<p>First Number:<input type="number" step="1" min="0" id="first"></p>
+			<p>Second Number:<input type="number" step="1" min="0" id="second"></p>		
+			<br>
+			<input type="radio" value="Subtract" id="subtract" checked>Subtract</input>
+			<br>
+			<input type="radio" value="Add" id="add">Add</input>
+			<br>
+			<input type="radio" value="Multiply" id="multiply">Multiply</input>
+			<br>
+			<input type="radio" value="Divide" id="divide">Divide</input>
+			<br>
+			<br>
+			<input type="submit" value="Submit" id="submit">	
+		</form>
+		<br>
+		<br>
+		<h3>Your result is... <input type="number" id="result"/></h3>
+
+
+		<script type="text/javascript">
+			var first;
+			var second;
+			var result;
+
+			var subtract = function subtract(){
+				first = document.getElementById("first").value;
+				second = document.getElementById("second").value;
+				result = first - second;
+				document.getElementById("result").value = result;
+			}
+
+			var add = function add(){
+				first = document.getElementById("first").value;
+				second = document.getElementById("second").value;
+				result = first + second;
+				document.getElementById("result").value = result;
+			}
+
+			var multiply = function multiply(){
+				first = document.getElementById("first").value;
+				second = document.getElementById("second").value;
+				result = first * second;
+				document.getElementById("result").value = result;
+			}
+
+			var divide = function divide(){
+				first = document.getElementById("first").value;
+				second = document.getElementById("second").value;
+				result = first / second;
+				document.getElementById("result").value = result;
+			} 
+
+			//Referenced my code from last semester for these if statements
+			if(document.getElementById("subtract").checked){
+				document.getElementById("submit").addEventListener("click", subtract, false);
+			}
+
+			if(document.getElementById("add").checked){
+				document.getElementById("submit").addEventListener("click", add, false);
+			}
+
+			if(document.getElementById("mulitply").checked){
+				document.getElementById("submit").addEventListener("click", multiply, false);
+			}
+
+			if(document.getElementById("divide").checked){
+				document.getElementById("submit").addEventListener("click", divide, false);
+			}
+			//end of attribution
+		</script>
+
+	</body>
+</html>

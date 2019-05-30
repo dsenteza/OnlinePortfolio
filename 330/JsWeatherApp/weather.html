@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>WEATHER WIDGET</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+
+	<body>
+
+		<div class="weather" id="weatherWidget">
+			<div class="weather-loc"></div>
+			<div class="weather-humidity"></div>
+			<div class="weather-temp"></div>
+			<img class="weather-tomorrow"/>
+			<img class="weather-dayaftertomorrow"/>
+		</div>
+		<br><br>
+		<form>
+			<input type="button" value="Refresh Weather" id="refresh">
+		</form>
+
+		<script type="text/javascript">
+			document.addEventListener("DOMContentLoaded", fetchWeather, false);
+
+			document.getElementById("refresh").addEventListener("click", weather, false);
+
+			function weather(){
+			var xmlHttp = new XMLHttpRequest();
+			xmlHttp.open("GET", "https://classes.engineering.wustl.edu/cse330/content/weather_json.php",true);
+			xmlHttp.addEventListener("load", aJax, false);
+			xmlHttp.send(null);
+			}
+
+			//referenced my code from last semester to help with ajax request
+			function aJax(event){
+
+				//Parseing
+				var weather = JSON.parse(event.target.responseText);
+
+				//Grab city and state
+				var state = weather["location"];
+				var city = state["city"];
+	        	document.getElementsByClassName("weather-loc")[0].innerHTML = 
+					city + ", " + state["state"];
+			
+				//Grab humidity from atmosphere
+				var atm = weather["atmosphere"];
+				var hum = atm["humidity"];
+	        	document.getElementsByClassName("weather-humidity")[0].innerHTML = hum;
+
+	        	//Grabs temp from current weater
+				var currrent = weather["current"];
+				var temp = currrent["temp"];
+				document.getElementsByClassName("weather-temp")[0].innerHTML = temp;
+			}
+			//end of attribution
+
+		</script>
+
+	</body>
+</html>

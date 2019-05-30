@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>Online Chat Room Service</title>
+      <script src="/socket.io/socket.io.js"></script>
+      <script type ="text/javascript" >
+
+        // Creative part - implement facebook like and share
+        //https://developers.facebook.com/docs/plugins/like-button
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
+      //Many parts of this file were based off of information on the course wiki at
+      //https://classes.engineering.wustl.edu/cse330/index.php?title=Socket.IO
+      var userInput = document.createElement("INPUT");
+      userInput.setAttribute("type", "text");
+
+      var defaultUser = "Guest";
+      var username;
+      var chatname = "Chatroom 1";
+      var socketio = io.connect();
+
+      var defaultRoom = "default_room";
+      var room = defaultRoom;
+
+      var users = [];
+      var inRoom = [];
+
+      //Auto joins the default room
+      socketio.emit("autoJoin", room);
+
+      //Scrolling to bottom of page 
+      //http://www.sourcetricks.com/2010/07/javascript-scroll-to-bottom-of-page.html#.Wgu6VBNSxmA
+      function scroll() {
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+
+      //Sending messages to the client
+      socketio.on("to_client", function(data) {
+          //Users who are not the viewer ahve different colors 
+          //https://stackoverflow.com/questions/17757337/is-there-a-simple-way-using-css-or-javascript-to-change-the-background-color-of
+        var div = document.getElementById("log");
+        var text = document.createElement("span");
+        if (data["message"].startsWith(username)) {
+          text.setAttribute("style", "color: blue");
+        } 
+        else {
+          text.setAttribute("style", "color: green");
+        }
+
+        //Span referenced:
+        //https://stackoverflow.com/questions/8746062/add-css-style-into-textnode-dynamically
+        var textNode = document.createTextNode(data["message"]);
+        text.appendChild(textNode);
+        document.getElementById("log").appendChild(text);
+        document.getElementById("log").appendChild(document.createElement("hr"));
+        scroll();
+      });
+
+      //Sending usernames to the client
+      socketio.on("user2client", function(data) {
+         var index = contains.call(inRoom, data["nickname"]);
+         inRoom[inRoom.length] = data["nickname"];
+         //If user isn't listed under "Users in Room"
+         if (!index) { 
+            document.getElementById("users").appendChild(document.createElement("br"));
+            document.getElementById("users").appendChild(document.createTextNode("- " + data["nickname"]));
+         }
+      });
+
+      //Updating the chatroom
+      socketio.on("updateRoom",function(data){
+        var room = data["room"];
+        document.getElementById("currentRoom").innerHTML = "current room:" + room;
+      });
+      //referenced: https://stackoverflow.com/questions/1181575/determine-whether-an-array-contains-a-value
+      //Supports printing users to check if array of displayed users 'usersInRoom' contains the name
+      var contains = function(needle) {
+          //Identify NaN by checking if it is not equal to itself
+          var findNaN = needle !== needle;
+          var indexOf;
+          if(!findNaN && typeof Array.prototype.indexOf === "function") {
+              indexOf = Array.prototype.indexOf;
+          } else {
+              indexOf = function(needle) {
+                  var i = -1, index = -1;
+                  for(i = 0; i < this.length; i++) {
+                      var item = this[i];
+
+                      if((findNaN && item !== item) || item === needle) {
+                          index = i;
+                          break;
+                      }
+                  }
+                  return index;
+              };
+          }
+          return indexOf.call(this, needle) > -1;
+      };
+
+      //Referenced: https://stackoverflow.com/questions/3390396/how-to-check-for-undefined-in-javascript
+      //'Guest' is the default if user has not inputted a nickname
+      function checkForNickname(){
+         var input_nickname = document.getElementById("usernameText").value;
+         if (input_nickname == "") {
+            username = defaultUser;
+         }
+         else {
+            username = input_nickname;
+         }
+      }
+
+      //Sends message
+      function sendMessage() {
+         var msg = document.getElementById("messageText").value;
+         checkForNickname();
+         var userMessage = username + ": " + msg;
+         socketio.emit("to_server", {message:userMessage, nickname:username});
+         scroll();
+      }
+
+      //Switches rooms
+      function switchRooms() {
+          room = document.getElementById("diffRoom").value;
+          socketio.emit("switchRooms", room);
+          inRoom = [];
+          //Clearing html objects from the DOM 
+          //https://stackoverflow.com/questions/683366/remove-all-the-children-dom-elements-in-div
+          while (document.getElementById("users").hasChildNodes()) {
+            document.getElementById("users").removeChild(document.getElementById("users").lastChild);
+          }
+          scroll();
+      }
+
+      </script>
+   </head>
+   <body>
+      <!-- https://developers.facebook.com/docs/plugins/like-button -->
+      <div id="fb-root"></div>
+      <div class="fb-like" data-href="http://ec2-52-14-221-21.us-east-2.compute.amazonaws.com:3456/" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div><br>
+
+      <h1>Online Chat Room</h1>
+      <div id="log"></div>
+      <br>
+      <label>Nickname:<input type="text" id="usernameText" placeholder="What's your nickname...?"/></label>
+      <br><br>
+      <div>
+        <p>Join or Create a Room here:</p>
+        <input type="text" id="diffRoom" placeholder="Room Name Goes Here"/>
+        <br><br>
+        <button id="switch" onclick="switchRooms()">Join/Create</button>
+        <br><br>
+      </div>
+      <textarea rows="4" cols="60" id="messageText"></textarea>
+      <br><br>
+      <button id="send" onclick="sendMessage()">Send</button>
+      <br><br>
+      <label>Users in Room:</label><br>
+      <div id="users"></div><br>
+      <div id = "currentRoom"></div>
+   </body>
+</html>

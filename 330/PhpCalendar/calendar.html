@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+	<head> 
+		<meta charset="utf-8">
+		<title>Your CSE330 Calendar</title>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css"type="text/css" rel="Stylesheet" />
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
+		<script src="http://classes.engineering.wustl.edu/cse330/content/calendar.min.js" type="text/javascript"> </script>
+
+		<style type="text/css">
+			body{
+				width: 760px;
+				background-color: #9ecae1;
+				margin: 0 auto;
+			}
+			div#main{
+				background-color: #f0f0f0;
+				padding: 10px;
+			}
+			td{
+				width: 100px;
+				padding: 10px;
+				border: 5px solid gray;
+			}
+			.notmonth{
+				background-color: #bdbdbd;
+			}
+			.day {
+				border: 5px solid gray;
+				height: 300px;
+				vertical-align: text-top;
+			}
+		</style>
+	</head>
+
+	<h1> Your CSE330 Calendar </h1>
+
+	<body><div id="main">
+
+		<!-- top page log in, register, logout navigations -->
+		<button id ="login">Login</button>
+		Name:<input id="loginUsr" type="text"/>
+		Password:<input id="loginPas" type="password"/>
+		<br><br>
+		<button id ="registration">Register</button>
+		Name:<input id="registerUsr" type="text"/>
+		Password:<input id="registerPas" type="password"/>
+		<br><br>
+		<button id="logout">Logout</button>
+		<br><br>
+
+		<!-- calendar title, navigation, view -->
+		<h2 id = "month">Month</h2>
+		<button id="prevmonth"><<</button> <button id="nextmonth">>></button> 
+		<h5 id='week'>View by: <select id="switchView">
+			<option value="month" id="monView">Month</option>
+			<option value="week" id="weekView">Week</option>
+			<option value="day" id="dayView">Day</option>
+		</select></h5>
+		<br>
+		<button id="viewevents">View Events</button>
+		<br><br>
+		<table id="personalcalendar">
+			<tr>
+				<th>Sunday</th>
+				<th>Monday</th>
+				<th>Tuesday</th>
+				<th>Wednseday</th>
+				<th>Thursday</th>
+				<th>Friday</th>
+				<th>Saturday</th>
+			</tr>
+			<tr id="week1" class="week"><td id="0">0</td><td id="1">1</td><td id="2">2</td><td id="3">3</td><td id="4"</td>4<td id="5">5</td><td id="6">6</td></tr>
+			<tr id="week2" class="week"><td id="7">0</td><td id="8">1</td><td id="9">2</td><td id="10">3</td><td id="11"</td>4<td id="12">5</td><td id="13">6</td></tr>
+			<tr id="week3" class="week"><td id="0">0</td><td id="1">1</td><td id="2">2</td><td id="3">3</td><td id="4"</td>4<td id="5">5</td><td id="6">6</td></tr>
+			<tr id="week4" class="week"><td id="0">0</td><td id="1">1</td><td id="2">2</td><td id="3">3</td><td id="4"</td>4<td id="5">5</td><td id="6">6</td></tr>
+			<tr id="week5" class="week"><td id="0">0</td><td id="1">1</td><td id="2">2</td><td id="3">3</td><td id="4"</td>4<td id="5">5</td><td id="6">6</td></tr>
+			<tr id="week6" class="week"><td id="0">0</td><td id="1">1</td><td id="2">2</td><td id="3">3</td><td id="4"</td>4<td id="5">5</td><td id="6">6</td></tr>
+		</table>
+
+		<div id="mydialog" title="Please input event">
+			<input id="eventTitle" type="text" value="name"/>
+			<input type="datetime-local" id="startTime" value="startTime"/>
+			<input type="datetime-local" id="endTime" value="endTime"/>
+			<input type="text" id="description" value="description"/>
+			<button id="eventSub" value="submit">Submit</button>
+		</div>
+
+
+		<p id="dynamicplacedholder"> Please log in at the top of the page to use the calendar. </p>
+
+
+		<script type = "text/javascript">
+			document.getElementById("login").addEventListener("click", login, false);
+			document.getElementById("registration").addEventListener("click", register, false);
+			document.getElementById("logout").addEventListener("click", logout, false);
+			document.getElementById("nextmonth").addEventListener("click", next, false);
+			document.getElementById("prevmonth").addEventListener("click", prev, false);
+			document.getElementById("viewevents").addEventListener("click", getEvents, false);
+			document.getElementById("switchView").addEventListener("change", monView, false);
+			document.getElementById("eventSub").addEventListener("click", addtoDB, false);
+
+
+			//testing out month functionallity
+			var calendar = document.getElementsByClassName("week");
+			var currentMonth = new Month(2017,2);
+			var currentWeek = currentMonth.getWeeks()[0];
+			var currentDay = currentWeek.getDates()[0].getDate();
+
+			var viewMode = "m";
+
+
+			document.getElementById("mydialog").style.visibility="hidden";
+			document.getElementById("month").innerHTML = monthToString(currentMonth.month);
+			calendarDates(currentMonth);
+
+
+			function login(){
+				var username = document.getElementById("loginUsr").value;
+				var password = document.getElementById("loginPas").value;
+				
+				$(document).ready(function(){
+					$.ajax({
+						type: "POST",
+						url: "login.php",
+						data: {username: username,
+							   password: password},
+						datatype: "text",
+						success: function(response){
+							alert("Login successful!");
+							$("#dynamicplacedholder").html(response);
+						}
+					});
+				});
+				
+			}
+
+			function register(){
+				var username = document.getElementById("registerUsr").value;
+				var password = document.getElementById("registerPas").value;
+				
+				$(document).ready(function(){
+					$.ajax({
+						type: "POST",
+						url: "register.php",
+						data: {username: username,
+							   password: password},
+						datatype: "text",
+						success: function(response){
+							alert("Registration and login successful!");
+							$("#dynamicplacedholder").html(response);
+						}
+					});
+				});
+			}
+
+			function logout(){
+				var temp = new Date();
+				var temp2 = new Month(temp.getFullYear(),temp.getMonth());
+				calendarDates(temp2);
+				document.getElementById("month").innerHTML = monthToString(temp2.month);
+				$.ajax({
+						type: "POST",
+						url: "logout.php",
+						datatype: "text",
+						success: function(response){
+							alert("Logout successful!");
+							$("#dynamicplacedholder").html(response);
+						}
+					});
+			}
+
+			function monView(){
+				var which = $("#switchView").val();
+				if(which == "month"){
+					viewMode = "m";
+					var monthHTML = "<tr>" +
+					"<th>Sunday</th>" + 
+					"<th>Monday</th>" +
+					"<th>Tuesday</th>" +
+					"<th>Wednseday</th>" +
+					"<th>Thursday</th>" +
+					"<th>Friday</th>" +
+					"<th>Saturday</th>"+
+					"</tr>" + "<tr id='week1' class='week'><td id='0'>0</td><td id='1'>1</td><td id='2'>2</td><td id='3'>3</td><td id='4'</td>4<td id='5'>5</td><td id='6'>6</td></tr>" +
+					"<tr id='week2' class='week'><td id='7'>0</td><td id='8'>1</td><td id='9'>2</td><td id='10'>3</td><td id='11'</td>4<td id='12'>5</td><td id='13'>6</td></tr>" +
+					"<tr id='week3' class='week'><td id='0'>0</td><td id='1'>1</td><td id='2'>2</td><td id='3'>3</td><td id='4'</td>4<td id='5'>5</td><td id='6'>6</td></tr>" +
+					"<tr id='week4' class='week'><td id='0'>0</td><td id='1'>1</td><td id='2'>2</td><td id='3'>3</td><td id='4'</td>4<td id='5'>5</td><td id='6'>6</td></tr>" +
+					"<tr id='week5' class='week'><td id='0'>0</td><td id='1'>1</td><td id='2'>2</td><td id='3'>3</td><td id='4'</td>4<td id='5'>5</td><td id='6'>6</td></tr>" +
+					"<tr id='week6' class='week'><td id='0'>0</td><td id='1'>1</td><td id='2'>2</td><td id='3'>3</td><td id='4'</td>4<td id='5'>5</td><td id='6'>6</td></tr>";
+
+					$("#personalcalendar").html(monthHTML);
+					for(i=0;i<6;i++){
+					//var days = currentMonth.getWeeks()[i].getDates();
+						for(j=0;j<7;j++){
+							document.getElementById("personalcalendar").rows[i+1].cells[j].addEventListener("click",viewEvents, false);										
+						}
+					}
+					calendarDates(currentMonth);
+				}
+				if(which == "week"){
+					viewMode = "w";
+					var weekHTML = "<tr> " + 
+					"<th>Sunday</th>" +
+					"<th>Monday</th>" +
+					"<th>Tuesday</th>" +
+					"<th>Wednseday</th>" +
+					"<th>Thursday</th>" +
+					"<th>Friday</th>" +
+					"<th>Saturday</th>" +
+				"</tr>" +
+				"<td class='day' id='0'></td>" +
+				"<td class='day' id='1'></td>" +
+				"<td class='day' id='2'></td>" +
+				"<td class='day' id='3'></td>" +
+				"<td class='day' id='4'></td>" +
+				"<td class='day' id='5'></td>" +
+				"<td class='day' id='6'></td>";
+				$("#personalcalendar").html(weekHTML);
+				listWeek(currentWeek);
+				}
+				if(which =="day"){
+					viewMode = "d";
+					var dayHTML = "<tr> " + 
+					"<th>Sunday</th>" +
+				"</tr>" +
+				"<td class='day' id='0'></td>";
+				$("#personalcalendar").html(dayHTML);
+				}
+			}
+
+			function viewEvents(){
+				var day = $(event.target).text();
+				if(day.length == 1) day = "0" + day;
+				var month = currentMonth.month;
+				document.getElementById("mydialog").style.visibility="visible";
+				$("#mydialog").dialog();
+				
+				document.getElementById("startTime").value = month + day;
+				
+			}
+
+			function addEvent(){
+				document.getElementById("mydialog").style.visibility="visible";
+				$("#mydialog").dialog();
+			}
+
+
+			function addtoDB(){
+				var name = document.getElementById("eventTitle").value;
+				var start = new Date(document.getElementById("startTime").value);
+				var end = new Date(document.getElementById("endTime").value);
+				var desc = document.getElementById("description").value;
+				
+				start = start.toISOString().slice(0, 19).replace('T', ' ');
+				end = end.toISOString().slice(0, 19).replace('T', ' ');
+
+				$(document).ready(function(){
+					$.ajax({
+						type: "POST",
+						url: "create_event.php",
+						data: { eventTitle: name,
+								eventStart: start,
+								eventEnd: end,
+								description: desc,
+							},
+						datatype: "text",
+						success: function(response){
+							// alert("success!");
+							$("#dynamicplacedholder").html(response);
+						}
+					});
+				});
+			}
+
+			document.getElementById("mydialog").getElementsByTagName("button")[0].addEventListener("click",addtoDB,false);
+
+			function next(){
+				if(viewMode == "m") nextMonth();
+				if(viewMode == "w") nextWeek();
+				if(viewMode == "d") nextDay();
+			}
+
+			function prev(){
+				if(viewMode == "m") prevMonth();
+				if(viewMode == "w") prevWeek();
+				if(viewMode == "d") prevDay();
+			}
+
+			function nextMonth(){
+				currentMonth = currentMonth.nextMonth();
+				currentWeek = currentMonth.getWeeks()[0];
+				currentDay = currentWeek.getDates()[0].getDate();
+				document.getElementById("month").innerHTML = monthToString(currentMonth.month);	
+				calendarDates(currentMonth);
+			}
+
+			function prevMonth(){
+				currentMonth = currentMonth.prevMonth();
+				currentWeek = currentMonth.getWeeks()[0];
+				currentDay = currentWeek.getDates()[0].getDate();
+				document.getElementById("month").innerHTML = monthToString(currentMonth.month);
+				calendarDates(currentMonth);
+			}
+
+			function nextWeek(){
+				currentWeek = currentWeek.nextWeek();
+				for(i=0;i<7;i++){
+					if(currentWeek.getDates()[i].getDate() == 1){
+						currentMonth = currentMonth.nextMonth();
+						document.getElementById("month").innerHTML = monthToString(currentMonth.month);	
+					}
+				}
+				listWeek(currentWeek);
+			}
+
+			function prevWeek(){
+				for(i=0;i<7;i++){
+					if(currentWeek.getDates()[i].getDate() == 1){
+						currentMonth = currentMonth.prevMonth();
+						document.getElementById("month").innerHTML = monthToString(currentMonth.month);	
+					}
+				}
+				currentWeek = currentWeek.prevWeek();
+				
+				listWeek(currentWeek);
+			}
+
+			function nextDay(){
+				// TODO: implement function
+			}
+
+			function prevDay(){
+				// TODO: implement function
+			}
+
+			function calendarDates(month){
+				var weeks = month.getWeeks();
+				var curMonth = false;
+				var yesterday = weeks[0].getDates()[0].getDate();
+				var notmonth = "";
+				for(i=0;i<weeks.length;i++){
+					var days = weeks[i].getDates();
+
+					for(j=0;j<days.length;j++){
+						var dayInMonth =days[j].getDate();
+						
+						if(yesterday > dayInMonth) {
+							curMonth = !curMonth;
+						}
+						if(!curMonth){
+							document.getElementById("personalcalendar").rows[i+1].cells[j].outerHTML = "<td class='notmonth' id='0'>0</td>";
+						}
+						document.getElementById("personalcalendar").rows[i+1].cells[j].innerHTML = "<p" + notmonth + ">" + dayInMonth + "</p>";
+						yesterday = dayInMonth;
+					}
+					if(i+1 < 6){
+						$("#week6").hide();
+					}
+					else {
+						$("#week6").show();
+					}
+				}
+				curMonth = false;
+			}
+
+			function listWeek(week){
+				var days = week.getDates();
+
+				for(i = 0; i < days.length; i++){
+					var dayInWeek=days[i].getDate();
+					$("#" + i).html(dayInWeek);
+				}
+			}
+
+			function getEvents(){
+				$(document).ready(function(){
+					$.ajax({
+						type: "POST",
+						url: "get_events.php",
+						datatype: "text",
+						success: function(response){
+							$("#dynamicplacedholder").html(response);
+							var events = JSON.parse(response);
+							console.log(events);
+							alert(events);
+							alert(events.starts);
+							var i;
+							for(i in events["starts"]){
+								alert(i);
+								alert(events.starts[i]);
+								var tempDate = new Date(events.starts[i]);
+								alert(tempDate);
+								var tempDay = tempDate.getDate();
+								alert(tempDay);
+								
+								for(m=0;m<6;m++){
+									for(n=0;n<7;n++){
+										if( document.getElementById("personalcalendar").rows[m+1].cells[n].innerHTML == tempDay ){		
+											document.getElementById("personalcalendar").rows[m+1].cells[n].innerHTML +=events.titles[i] + events.starts[i] + events.ends[i] + events.descriptions[i];								
+										}
+									}
+
+									}
+							
+								}
+						}
+					});
+				});	
+			}
+
+			function monthToString(monthNum){
+				var text;
+				switch (monthNum){
+				case 0:
+					text = "January";
+					break;
+				case 1:
+					text = "February";
+					break;
+				case 2:
+					text = "March";
+					break;
+				case 3:
+					text = "April";
+					break;
+				case 4:
+					text = "May";
+					break;
+				case 5:
+					text = "June";
+					break;
+				case 6:
+					text = "July";
+					break;
+				case 7:
+					text = "August";
+					break;
+				case 8:
+					text = "September";
+					break;
+				case 9:
+					text = "October";
+					break;
+				case 10:
+					text = "November";
+					break;
+				case 11:
+					text = "December";
+					break;
+				default:
+					text = "Unknown Month";
+					break;	
+				}
+				return text;
+			}
+		</script>	 
+	</div></body>
+</html>

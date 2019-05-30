@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Toggle Test</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	</head>
+	<body>
+		<div id="toggle">
+			<i class="fa fa-heart-o" aria-hidden="true"></i>
+		</div>
+
+		<script>
+			// $('#toggle i').click(function(){
+			//     $(this).find('i').toggleClass('fa fa-heart')
+			// });
+			$("#toggle i").toggle(function() {
+			        $('#target').removeClass("fa fa-heart-o").addClass("fa fa-heart"); //Adds 'a', removes 'b'
+			}, function() {
+			        $('#target').removeClass("fa fa-heart").addClass("fa fa-heart-o"); //Adds 'b', removes 'a'
+
+			});
+		</script>
+	</body>	
+</html>
