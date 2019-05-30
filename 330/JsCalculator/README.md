@@ -4,4 +4,4 @@ This README would normally document whatever steps are necessary to get your app
 
 ### What is this repository for? ###
 
-JavaScript Calculator and Weather Widget
+Basic JavaScript caluclator
