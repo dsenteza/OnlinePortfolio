@@ -1,4 +1,0 @@
-//refrenced https://stackoverflow.com/questions/35688864/regular-expressions-to-match-flight-number
-
-^([A-Z]{2}\d{3,4}\d)
-
